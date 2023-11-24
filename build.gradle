@@ -1,0 +1,126 @@
+buildscript {
+    ext {
+        queryDslVersion = '5.0.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.6'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'checkstyle'
+    id 'org.ec4j.editorconfig' version '0.0.3'
+    id("com.google.osdetector") version "1.7.1"
+}
+
+group = 'com.ex'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    implementation "org.springdoc:springdoc-openapi-ui:1.6.12"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.566'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.0'
+    implementation ('com.github.javafaker:javafaker:1.0.2') { exclude module: 'org.yaml' }
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.32'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    // WebSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+
+    // queryDSL 설정
+    implementation "com.querydsl:querydsl-jpa"
+    implementation "com.querydsl:querydsl-core"
+    implementation "com.querydsl:querydsl-collections"
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // querydsl JPAAnnotationProcessor 사용 지정
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
+
+    if (osdetector.classifier == "osx-aarch_64") { // MacOS 일 때 이슈 해결용 의존성 추가
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.77.Final:${osdetector.classifier}")
+    }
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+clean {
+    delete file(querydslDir)
+}
+
+tasks.named('test') {
+    file(".env").eachLine {
+        String[] tokens = it.split("=")
+        if (tokens.length > 1) {
+            String key = tokens[0]
+            String value = tokens[1]
+            environment(key, value)
+        }
+    }
+    useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion = '10.12.3'
+    maxWarnings 0
+    ignoreFailures false
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+clean {
+    delete file(querydslDir)
+}
+
+checkstyleTest {
+    source = 'src/main/test'
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+    }
+}
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
