@@ -121,9 +121,8 @@ spring:
         format_sql: true
   data:
     redis:
-      host: ${HOME_REDIS_HOST}
       port: 6379
-
+      host: ${HOME_REDIS_HOST}
 
 # dev 환경
 ---
@@ -154,8 +153,8 @@ spring:
         format_sql: true
   data:
     redis:
-      port: 6379
       host: ${HOME_REDIS_HOST}
+      port: 6379
 
 ---
 
@@ -182,3 +181,4 @@ spring:
     redis:
       host: ${HOME_REDIS_HOST}
       port: 6379
+
