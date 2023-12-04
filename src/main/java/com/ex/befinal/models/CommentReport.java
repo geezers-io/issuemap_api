@@ -1,6 +1,5 @@
 package com.ex.befinal.models;
 
-import com.ex.befinal.models.embed.BasicDateColumn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
