@@ -22,7 +22,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @Component
-
 public class HttpLogger extends OncePerRequestFilter {
   private final List<String> excludeAntPaths = Arrays.asList(
       "/v1/swagger-ui/**", "/v1/docs/**", "/v1/api-docs/**"

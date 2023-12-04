@@ -1,7 +1,6 @@
 package com.ex.befinal.models;
 
 import com.ex.befinal.constant.UserRole;
-import com.ex.befinal.models.embed.BasicDateColumn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
