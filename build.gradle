@@ -5,8 +5,6 @@ plugins {
     id 'checkstyle'
     id 'org.ec4j.editorconfig' version '0.0.3'
     id("com.google.osdetector") version "1.7.1"
-    // queryDSL 추가
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.ex'
@@ -37,10 +35,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
+    //mysql 8.1부터는 group은 com.mysql artifact는 mysql-connector-j로 변경
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    implementation "org.springdoc:springdoc-openapi-ui:1.6.12"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.session:spring-session-data-redis'
@@ -48,7 +47,8 @@ dependencies {
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.566'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.0'
     implementation ('com.github.javafaker:javafaker:1.0.2') { exclude module: 'org.yaml' }
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.32'
+    //spring boot 3.2부터 version 2.2로 업데이트 2.7.x부터 3.2전까지는 1.33버전 호환
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
     // WebSocket
@@ -66,24 +66,19 @@ dependencies {
     }
 }
 
-def querydslDir = "$buildDir/generated/querydsl"
-
-querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
+def querydslDir = "src/main/generated"
 
 sourceSets {
-    main.java.srcDirs querydslDir
+    main.java.srcDirs += [ querydslDir ]
 }
 
-configurations {
-    querydsl.extendsFrom compileClasspath
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
 }
 
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
 
 tasks.named('test') {

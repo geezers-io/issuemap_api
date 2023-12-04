@@ -9,7 +9,7 @@ server:
         name: JSESSIONID
         http-only: true
       timeout: 3600
-    context-path: /api
+    context-path: /v1
 
 cloud:
   aws:
@@ -90,8 +90,6 @@ logging:
     org.hibernate.sql: DEBUG
     org.hibernate.type: TRACE
     org.hibernate.hql.internal.ast: WARN
-    org.mongodb.driver.cluster: ERROR
-    org.mongodb.driver.protocol: ERROR
     org.springframework.data.redis.core.RedisConnectionUtils: WARN
     io.lettuce.core.protocol: WARN
     com.amazonaws.util.EC2MetadataUtils: ERROR
@@ -136,7 +134,7 @@ spring:
     redis:
       namespace: stock2u:session
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       jdbc-url: ${HOME_JDBC_URL}
       username: ${HOME_MARIADB_USERNAME}
@@ -169,7 +167,7 @@ spring:
     redis:
       namespace: befinal:session
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       jdbc-url: ${HOME_JDBC_URL}
       username: ${HOME_MARIADB_USERNAME}
