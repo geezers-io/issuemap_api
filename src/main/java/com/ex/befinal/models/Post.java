@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -22,7 +21,7 @@ import org.hibernate.annotations.Comment;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "posts")
-public class Post implements Serializable{
+public class Post implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -49,12 +48,12 @@ public class Post implements Serializable{
   private BigDecimal longitude;
 
   @Column(name = "created_at")
-  private LocalDateTime createAt;
+  private LocalDateTime createdAt;
 
   @Column(name = "removed_at")
   private LocalDateTime removedAt;
 
   @Column(name = "disable_at")
-  private LocalDateTime disableAt;
+  private LocalDateTime disabledAt;
 
 }
