@@ -57,5 +57,4 @@ public class Post implements Serializable{
   @Column(name = "disable_at")
   private LocalDateTime disableAt;
 
-
 }
