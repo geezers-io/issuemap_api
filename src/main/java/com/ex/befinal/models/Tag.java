@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,5 +18,10 @@ public class Tag {
   private Long id;
 
   @Column(name = "tag")
-  private String tag;
+  private String name;
+
+  public Tag(String name) {
+    this.name = name;
+  }
+
 }
