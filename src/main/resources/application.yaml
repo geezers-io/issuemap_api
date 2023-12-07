@@ -57,11 +57,10 @@ spring:
           kakao:
             client-id: ${KAKAO_REST_API}
             client-name: Kakao
-            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             scope: account_email
-            redirect-uri: https://localhost:3000/auth/oauth-redirect
+            redirect-uri: http://localhost:8082/v1/home
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -105,10 +104,9 @@ spring:
       on-profile: "local"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      jdbc-url: ${HOME_JDBC_URL}
-      username: ${HOME_MARIADB_USERNAME}
-      password: ${HOME_MARIADB_PASSWORD}
+    url: ${HOME_JDBC_URL}
+    username: ${HOME_MARIADB_USERNAME}
+    password: ${HOME_MARIADB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -121,7 +119,7 @@ spring:
     redis:
       host: ${HOME_REDIS_HOST}
       port: 6379
-
+      password: ${HOME_REDIS_PASSWORD}
 
 # dev 환경
 ---
@@ -132,7 +130,7 @@ spring:
   session:
     store-type: redis
     redis:
-      namespace: stock2u:session
+      namespace: befinal:session
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
@@ -168,10 +166,9 @@ spring:
       namespace: befinal:session
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      jdbc-url: ${HOME_JDBC_URL}
-      username: ${HOME_MARIADB_USERNAME}
-      password: ${HOME_MARIADB_PASSWORD}
+    url: ${HOME_JDBC_URL}
+    username: ${HOME_MARIADB_USERNAME}
+    password: ${HOME_MARIADB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
