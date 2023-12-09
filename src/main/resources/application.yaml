@@ -53,13 +53,19 @@ spring:
   security:
     oauth2:
       client:
-        regitstration:
+        registration:
           kakao:
             client-id: ${KAKAO_REST_API}
-            client-name: Kakao
+            client-name: kakao
+            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             client-authentication-method: POST
-            scope: account_email
+            scope:
+            - profile_nickname
+            - profile_image
+            - account_email
+            - gender
+            - birthday
             redirect-uri: http://localhost:8082/v1/home
         provider:
           kakao:
