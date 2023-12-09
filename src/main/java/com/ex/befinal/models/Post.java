@@ -2,7 +2,6 @@ package com.ex.befinal.models;
 
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,12 +47,12 @@ public class Post implements Serializable {
   private BigDecimal longitude;
 
   @Column(name = "created_at")
-  private LocalDateTime createdAt;
+  private Date createdAt;
 
   @Column(name = "removed_at")
-  private LocalDateTime removedAt;
+  private Date removedAt;
 
   @Column(name = "disable_at")
-  private LocalDateTime disabledAt;
+  private Date disabledAt;
 
 }

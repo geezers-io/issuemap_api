@@ -2,7 +2,6 @@ package com.ex.befinal.models;
 
 import com.ex.befinal.constant.UserRole;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,14 +9,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "users")
+@AllArgsConstructor
+@Builder
 public class User implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +45,15 @@ public class User implements Serializable {
   private short reportCount;
 
   @Column(name = "created_at")
-  private LocalDateTime createAt;
+  private Date createAt;
 
   @Column(name = "removed_at")
-  private LocalDateTime removedAt;
+  private Date removedAt;
 
   @Column(name = "disable_at")
-  private LocalDateTime disableAt;
+  private Date disableAt;
+
+  @Column(name = "provider")
+  private String provider;
 
 }
