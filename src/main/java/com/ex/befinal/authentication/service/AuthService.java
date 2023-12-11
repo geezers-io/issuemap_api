@@ -5,6 +5,7 @@ import com.ex.befinal.authentication.dto.KakaoUserDetailsResponse;
 import com.ex.befinal.authentication.dto.SignInResponse;
 import com.ex.befinal.authentication.dto.UrlJson;
 import com.ex.befinal.authentication.dto.UserDetails;
+import com.ex.befinal.authentication.provider.JwtTokenProvider;
 import com.ex.befinal.authentication.service.client.KakaoClient;
 import com.ex.befinal.authentication.service.strategy.SignInStrategy;
 import com.ex.befinal.authentication.service.strategy.SignInUrlCreateStrategy;
@@ -29,6 +30,7 @@ public class AuthService {
   private final KakaoClient kakaoClient;
   private final InMemoryClientRegistrationRepository inMemoryRepository;
   private final RandomNicknameGenerator nicknameGenerator;
+  private final JwtTokenProvider jwtTokenProvider;
   /**
    * AuthVendor 에 따른 각 Vendor 로그인을 수행하는 URL 을 반환합니다.
    */
@@ -42,9 +44,7 @@ public class AuthService {
     ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
     KakaoTokenResponse tokenResponse = kakaoClient.getToken(authCode, provider);
     User user = getUserProfile(providerName, tokenResponse, provider);
-
-    String accessToken = tokenResponse.getAccess_token();
-    String refreshToken = tokenResponse.getRefresh_token();
+    String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(user.getId()));
     UserDetails userDetails =
         new UserDetails(
             user.getId(),
@@ -53,7 +53,7 @@ public class AuthService {
             user.getNickName(),
             user.getCreateAt(),
             user.getProvider());
-    return new SignInResponse("BEARER_TYPE", accessToken, refreshToken, userDetails);
+    return new SignInResponse("BEARER_TYPE", accessToken, userDetails);
   }
 
   private User getUserProfile(String providerName, KakaoTokenResponse tokenResponse, ClientRegistration provider) {
@@ -67,6 +67,7 @@ public class AuthService {
           .createAt(new Date())
           .kakaoId(kakaoId.id())
           .role(UserRole.USER)
+          .enable(true)
           .nickName(n)
           .provider(providerName)
           .build();

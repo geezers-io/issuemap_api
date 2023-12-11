@@ -34,9 +34,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-j'
     //mysql 8.1부터는 group은 com.mysql artifact는 mysql-connector-j로 변경
-    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.2.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
@@ -50,11 +50,12 @@ dependencies {
     //spring boot 3.2부터 version 2.2로 업데이트 2.7.x부터 3.2전까지는 1.33버전 호환
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-
     // WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
-
+    //jwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
     // Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthApi {
   private final AuthService authService;
-
+  //TODO enable보고 spring security에서 enable인 애들은 초반에 필터에서 거르기
   @Operation(summary = "로그인 URL API")
   @GetMapping("/signin-url")
   public ResponseEntity<UrlJson> getSignInUrlApi() {

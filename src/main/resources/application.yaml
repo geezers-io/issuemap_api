@@ -73,6 +73,11 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+jwt:
+  token:
+    secret-key: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  access-token:
+    expire-length: 1800000
 
 springdoc:
   api-docs:
@@ -119,7 +124,7 @@ spring:
     database: mysql
     properties:
       hibernate:
-        #        show_sql: true
+        show_sql: true
         format_sql: true
   data:
     redis:

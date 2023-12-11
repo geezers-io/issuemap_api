@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "users")
 @AllArgsConstructor
@@ -56,4 +55,14 @@ public class User implements Serializable {
   @Column(name = "provider")
   private String provider;
 
+  @Column(name = "enable")
+  private boolean enable;
+
+  public void setEnable(boolean enable) {
+    this.enable = enable;
+  }
+
+  public boolean getEnable() {
+    return this.enable;
+  }
 }
