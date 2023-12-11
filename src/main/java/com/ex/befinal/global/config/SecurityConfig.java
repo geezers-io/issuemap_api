@@ -29,7 +29,10 @@ public class SecurityConfig {
         .formLogin(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(request -> request
-            .requestMatchers("/**").permitAll());
+            .requestMatchers(
+                "/swagger-ui/**", "/docs/**", "/api-docs/**",
+                "/**").permitAll());
+
     // @formatter:on
     return http.build();
   }

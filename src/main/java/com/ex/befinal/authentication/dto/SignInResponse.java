@@ -6,7 +6,6 @@ import lombok.Builder;
 @Builder
 public record SignInResponse(
 
-    String tokenType,
     String accessToken,
     @Schema(nullable = true, description = "사용자 정보 객체")
     UserDetails user

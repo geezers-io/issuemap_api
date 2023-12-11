@@ -53,7 +53,7 @@ public class AuthService {
             user.getNickName(),
             user.getCreateAt(),
             user.getProvider());
-    return new SignInResponse("BEARER_TYPE", accessToken, userDetails);
+    return new SignInResponse(accessToken, userDetails);
   }
 
   private User getUserProfile(String providerName, KakaoTokenResponse tokenResponse, ClientRegistration provider) {
