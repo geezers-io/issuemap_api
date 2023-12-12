@@ -9,11 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Tag(name = "E. 관리자 API")
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 public class AdminController {
 
   private final AdminService adminService;
@@ -31,7 +33,7 @@ public class AdminController {
   @Operation(summary = "관리자가 사용자 비/활성화 시키는 API")
   @PatchMapping("/disable/{kakaoId}")
   public ResponseEntity<Boolean> disableUser(
-      @PathVariable Long kakaoId
+      @PathVariable String kakaoId
   ) {
     boolean status = adminService.disableUser(kakaoId);
     return ResponseEntity.status(HttpStatus.OK).body(status);

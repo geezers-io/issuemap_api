@@ -28,7 +28,7 @@ public class User implements Serializable {
   private Long id;
 
   @Column(name = "kakao_id")
-  private Long kakaoId;
+  private String kakaoId;
 
   @Column(length = 10, nullable = false)
   private String nickName;

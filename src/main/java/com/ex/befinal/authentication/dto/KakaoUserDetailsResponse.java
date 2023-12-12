@@ -1,4 +1,4 @@
 package com.ex.befinal.authentication.dto;
 
-public record KakaoUserDetailsResponse(Long id) {
+public record KakaoUserDetailsResponse(String id) {
 }

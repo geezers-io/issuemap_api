@@ -4,7 +4,7 @@ import com.ex.befinal.authentication.dto.KakaoTokenResponse;
 import com.ex.befinal.authentication.dto.KakaoUserDetailsResponse;
 import com.ex.befinal.authentication.dto.SignInResponse;
 import com.ex.befinal.authentication.dto.UrlJson;
-import com.ex.befinal.authentication.dto.UserDetails;
+import com.ex.befinal.authentication.dto.UserResponse;
 import com.ex.befinal.authentication.provider.JwtTokenProvider;
 import com.ex.befinal.authentication.service.client.KakaoClient;
 import com.ex.befinal.authentication.service.strategy.SignInStrategy;
@@ -44,16 +44,19 @@ public class AuthService {
     ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
     KakaoTokenResponse tokenResponse = kakaoClient.getToken(authCode, provider);
     User user = getUserProfile(providerName, tokenResponse, provider);
-    String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(user.getId()));
-    UserDetails userDetails =
-        new UserDetails(
+    String accessToken = jwtTokenProvider.createAccessToken(user.getNickName());
+    String nickName = jwtTokenProvider.getNickName(accessToken);
+    log.info("별명이다"+ nickName);
+
+    UserResponse userResponse =
+        new UserResponse(
             user.getId(),
             user.getKakaoId(),
             user.getRole(),
             user.getNickName(),
             user.getCreateAt(),
             user.getProvider());
-    return new SignInResponse(accessToken, userDetails);
+    return new SignInResponse(accessToken, userResponse);
   }
 
   private User getUserProfile(String providerName, KakaoTokenResponse tokenResponse, ClientRegistration provider) {

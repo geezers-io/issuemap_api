@@ -12,7 +12,7 @@ public class AdminService {
 
   private final UserJpaRepository userJpaRepository;
 
-  public boolean disableUser(Long kakaoId) {
+  public boolean disableUser(String kakaoId) {
     User user = userJpaRepository.findByKakaoId(kakaoId)
         .orElseThrow(GlobalException.NOT_FOUND::create);
     if (user.getEnable()) {

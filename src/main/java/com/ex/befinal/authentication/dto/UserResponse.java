@@ -1,21 +1,17 @@
 package com.ex.befinal.authentication.dto;
 
+
 import com.ex.befinal.constant.UserRole;
 import java.util.Date;
 import lombok.Builder;
 
 @Builder
-public record UserDetails(
+public record UserResponse(
     Long id,
-
-    Long kakaoId,
-
+    String kakaoId,
     UserRole role,
-
     String nickName,
-
-    Date creatAt,
-
+    Date createdAt,
     String provider
 ) {
 }

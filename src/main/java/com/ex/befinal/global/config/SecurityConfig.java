@@ -1,39 +1,53 @@
 package com.ex.befinal.global.config;
 
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import static com.ex.befinal.constant.UserRole.ADMIN;
+import static com.ex.befinal.constant.UserRole.USER;
 
+import com.ex.befinal.authentication.filter.JwtAuthenticationFilter;
+import com.ex.befinal.authentication.provider.JwtTokenProvider;
+import com.ex.befinal.constant.UserRole;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableRedisHttpSession
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final JwtTokenProvider jwtTokenProvider;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    // @formatter:off
+
     http
+        .httpBasic(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
+        .logout(AbstractHttpConfigurer::disable)
+        .sessionManagement((session)  -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(request -> request
             .requestMatchers(
-                "/swagger-ui/**", "/docs/**", "/api-docs/**",
-                "/**").permitAll());
+                "/swagger-ui/**", "/docs/**",
+                "/api-docs/**", "/auth/**").permitAll()
+            .requestMatchers("/admin/**")
+            .authenticated())
+        .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+            UsernamePasswordAuthenticationFilter.class);
 
-    // @formatter:on
+
     return http.build();
   }
 

@@ -8,7 +8,7 @@ public record SignInResponse(
 
     String accessToken,
     @Schema(nullable = true, description = "사용자 정보 객체")
-    UserDetails user
+    UserResponse user
 ) {
 
 }
