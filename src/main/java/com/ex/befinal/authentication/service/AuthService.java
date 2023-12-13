@@ -11,7 +11,7 @@ import com.ex.befinal.authentication.service.strategy.SignInStrategy;
 import com.ex.befinal.authentication.service.strategy.SignInUrlCreateStrategy;
 import com.ex.befinal.constant.UserRole;
 import com.ex.befinal.models.User;
-import com.ex.befinal.repository.UserJpaRepository;
+import com.ex.befinal.user.repository.UserJpaRepository;
 import com.ex.befinal.utils.RandomNicknameGenerator;
 import java.util.Date;
 import java.util.Optional;
