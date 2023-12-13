@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -98,6 +99,9 @@ public class JwtTokenProvider {
   public Authentication getAuthentication(String token) {
     String nickName = getNickName(token);
     UserDetails userDetails = userDetailsService.loadUserByUsername(nickName);
+    if (!userDetails.isEnabled()) {
+      throw new DisabledException("비활성화 회원입니다. 관리자에게 문의하세요");
+    }
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
 }

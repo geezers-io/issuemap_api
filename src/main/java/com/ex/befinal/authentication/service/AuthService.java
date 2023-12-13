@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,9 @@ public class AuthService {
     ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
     KakaoTokenResponse tokenResponse = kakaoClient.getToken(authCode, provider);
     User user = getUserProfile(providerName, tokenResponse, provider);
+    if (!user.getEnable()) {
+      throw new DisabledException("비활성화된 회원입니다. 관리자에게 문의하세요.");
+    }
     String accessToken = jwtTokenProvider.createAccessToken(user.getNickName());
     String nickName = jwtTokenProvider.getNickName(accessToken);
     log.info("별명이다"+ nickName);
