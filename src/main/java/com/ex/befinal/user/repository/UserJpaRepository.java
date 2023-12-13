@@ -1,4 +1,4 @@
-package com.ex.befinal.repository;
+package com.ex.befinal.user.repository;
 
 import com.ex.befinal.models.User;
 import java.util.Optional;

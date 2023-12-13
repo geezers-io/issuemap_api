@@ -2,7 +2,7 @@ package com.ex.befinal.authentication.service.strategy;
 
 import com.ex.befinal.authentication.dto.CustomUserDetails;
 import com.ex.befinal.models.User;
-import com.ex.befinal.repository.UserJpaRepository;
+import com.ex.befinal.user.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
