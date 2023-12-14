@@ -42,7 +42,7 @@ public class SecurityConfig {
             .requestMatchers(
                 "/swagger-ui/**", "/docs/**",
                 "/api-docs/**", "/auth/**").permitAll()
-            .requestMatchers("/admin/**")
+            .requestMatchers("/admin/**", "/user/**")
             .authenticated())
         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
             UsernamePasswordAuthenticationFilter.class);
