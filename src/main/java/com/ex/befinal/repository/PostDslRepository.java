@@ -2,6 +2,7 @@ package com.ex.befinal.repository;
 
 import static com.ex.befinal.models.QPost.post;
 
+import com.ex.befinal.admin.dto.AdminAllIssuesResponse;
 import com.ex.befinal.admin.dto.AdminIssuesResponse;
 import com.ex.befinal.models.Post;
 import com.querydsl.core.QueryFactory;
@@ -38,7 +39,6 @@ public class PostDslRepository {
         .limit(pageable.getPageSize())
         .fetch();
   }
-
 
 
 }
