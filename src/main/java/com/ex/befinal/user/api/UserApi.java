@@ -6,6 +6,7 @@ import com.ex.befinal.user.domain.UserProfile;
 import com.ex.befinal.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.Token;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "C. 유저 API")
 @RequestMapping("/user")
 public class UserApi {
 
