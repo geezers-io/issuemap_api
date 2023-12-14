@@ -25,17 +25,8 @@ public class AdminController {
 
   private final AdminService adminService;
 
-//  @GetMapping
-//  public ResponseEntity<Void>
-//
-//  //kakaoId + 닉네임, 작성한 이슈수, 작성한 댓글 수, 상태, 가입일자
-//
-//  @GetMapping
-//  public ResponseEntity<Void>
-//
-//  //작성한 이슈목록으로 이동
 
-  @Operation(summary = "사용자가 작성한 게시글 가져오는 API")
+  @Operation(summary = "특정 사용자가 작성한 게시글 리스트 API")
   @GetMapping("/issues")
   public ResponseEntity<Page<AdminIssuesResponse>> getAdminIssues(
       @Parameter(description = "사용자 닉네임", required = true)
@@ -47,9 +38,9 @@ public class AdminController {
   ) {
     PageRequest pageable = PageRequest.of(page, size);
     Page<AdminIssuesResponse> responses = adminService.getAdminUserIssues(pageable, nickname);
-    return ResponseEntity.status(HttpStatus.OK).build();
+    return ResponseEntity.status(HttpStatus.OK).body(responses);
   }
-//게시시간 타이틀
+
   @Operation(summary = "관리자가 사용자 비/활성화 시키는 API")
   @PatchMapping("/disable/{kakaoId}")
   public ResponseEntity<Boolean> disableUser(

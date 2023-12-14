@@ -49,9 +49,6 @@ public class AuthService {
       throw new DisabledException("비활성화된 회원입니다. 관리자에게 문의하세요.");
     }
     String accessToken = jwtTokenProvider.createAccessToken(user.getNickName());
-    String nickName = jwtTokenProvider.getNickName(accessToken);
-    log.info("별명이다"+ nickName);
-
     UserResponse userResponse =
         new UserResponse(
             user.getId(),
