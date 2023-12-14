@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,30 +24,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthApi {
   private final AuthService authService;
   //TODO enable보고 spring security에서 enable인 애들은 초반에 필터에서 거르기
+
   @Operation(summary = "로그인 URL API")
   @GetMapping("/signin-url")
   public ResponseEntity<UrlJson> getSignInUrlApi() {
     UrlJson loginUrl = authService.getLoginUrl();
-    return ResponseEntity.ok(loginUrl);
+    return ResponseEntity.status(HttpStatus.OK).body(loginUrl);
   }
 
   @Operation(summary = "로그인 API", description = "OAuth 로그인시 인증 코드를 넘겨받은 후 첫 로그인 시 회원 가입")
   @GetMapping("/signin/{provider}")
-  public ResponseEntity<UserResponse> signInApi(
+  public ResponseEntity<SignInResponse> signInApi(
 
       @RequestParam String authCode,
-      @PathVariable String provider,
-      HttpServletResponse response
+      @PathVariable String provider
   ) {
     SignInResponse signIn = authService.signIn(provider, authCode);
-    UserResponse user = UserResponse.builder()
-        .id(signIn.user().id())
-        .kakaoId(signIn.user().kakaoId())
-        .role(signIn.user().role())
-        .nickName(signIn.user().nickName())
-        .createdAt(signIn.user().createdAt())
-        .provider(signIn.user().provider()).build();
-    response.setHeader("Authorization", "Bearer " + signIn.accessToken());
-    return ResponseEntity.ok(user);
+
+    return ResponseEntity.status(HttpStatus.OK).body(signIn);
   }
 }
