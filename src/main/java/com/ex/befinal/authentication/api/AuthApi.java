@@ -40,7 +40,6 @@ public class AuthApi {
       @PathVariable String provider
   ) {
     SignInResponse signIn = authService.signIn(provider, authCode);
-
     return ResponseEntity.status(HttpStatus.OK).body(signIn);
   }
 }

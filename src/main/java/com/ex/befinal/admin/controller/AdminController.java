@@ -1,10 +1,12 @@
 package com.ex.befinal.admin.controller;
 
+import com.ex.befinal.admin.dto.AdminAllIssuesResponse;
 import com.ex.befinal.admin.dto.AdminIssuesResponse;
 import com.ex.befinal.admin.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,17 +27,20 @@ public class AdminController {
 
   private final AdminService adminService;
 
-//  @GetMapping
-//  public ResponseEntity<Void>
-//
-//  //kakaoId + 닉네임, 작성한 이슈수, 작성한 댓글 수, 상태, 가입일자
-//
-//  @GetMapping
-//  public ResponseEntity<Void>
-//
-//  //작성한 이슈목록으로 이동
+  @Operation(summary = "모든 사용자 게시글 리스트 가져오기 API")
+  @GetMapping("/issues/all")
+  public ResponseEntity<Page<AdminAllIssuesResponse>> getAdminAllIssues(
+      @Parameter(description = "조회할 페이지 넘버(0부터 시작)", required = true)
+      @RequestParam("page") int page,
+      @Parameter(description = "가져올 데이터 갯수 단위", required = true)
+      @RequestParam("size") int size
+  ) {
+    PageRequest pageable = PageRequest.of(page, size);
+    Page<AdminAllIssuesResponse> responses = adminService.getAdminAllIssues(pageable);
+    return ResponseEntity.status(HttpStatus.OK).body(responses);
+  }
 
-  @Operation(summary = "사용자가 작성한 게시글 가져오는 API")
+  @Operation(summary = "특정 사용자가 작성한 게시글 리스트 API")
   @GetMapping("/issues")
   public ResponseEntity<Page<AdminIssuesResponse>> getAdminIssues(
       @Parameter(description = "사용자 닉네임", required = true)
@@ -47,15 +52,15 @@ public class AdminController {
   ) {
     PageRequest pageable = PageRequest.of(page, size);
     Page<AdminIssuesResponse> responses = adminService.getAdminUserIssues(pageable, nickname);
-    return ResponseEntity.status(HttpStatus.OK).build();
+    return ResponseEntity.status(HttpStatus.OK).body(responses);
   }
-//게시시간 타이틀
+
   @Operation(summary = "관리자가 사용자 비/활성화 시키는 API")
-  @PatchMapping("/disable/{kakaoId}")
+  @PatchMapping("/disable/{nickname}")
   public ResponseEntity<Boolean> disableUser(
-      @PathVariable String kakaoId
+      @PathVariable String nickname
   ) {
-    boolean status = adminService.disableUser(kakaoId);
+    boolean status = adminService.disableUser(nickname);
     return ResponseEntity.status(HttpStatus.OK).body(status);
 
   }
