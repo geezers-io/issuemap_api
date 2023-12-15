@@ -66,7 +66,7 @@ spring:
             - account_email
             - gender
             - birthday
-            redirect-uri: http://localhost:8082/v1/home
+            redirect-uri: http://localhost:3000/register/callback
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
