@@ -3,11 +3,17 @@ package com.ex.befinal.file.service;
 import ch.qos.logback.core.spi.ErrorCodes;
 import com.ex.befinal.file.dto.PostRequestDTO;
 import com.ex.befinal.file.dto.PostResponseDTO;
+<<<<<<< HEAD
 import com.ex.befinal.file.exception.CustomException;
 import com.ex.befinal.file.repository.PostRepository;
 import com.ex.befinal.models.Post;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.message.Message;
+=======
+import com.ex.befinal.file.repository.PostRepository;
+import com.ex.befinal.models.Post;
+import lombok.RequiredArgsConstructor;
+>>>>>>> 62b7de8 (feat: 게시글 등록, 수정, 조회, 삭제)
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +44,11 @@ public class PostService {
     //게시글 수정
     @Transactional
     public Long update(final Long id, final PostRequestDTO params){
+<<<<<<< HEAD
         Post entity = postRepository.findById(id).orElseThrow(() -> new CustomException("게시글 수정 완료"));
+=======
+        Post entity = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCodes.POST_NOT_FOUND));
+>>>>>>> 62b7de8 (feat: 게시글 등록, 수정, 조회, 삭제)
         entity.update(params.getTitle(), params.getDescription(), params.getUser(), params.getUser().getCreateAt());
         return id;
     }
@@ -46,7 +56,11 @@ public class PostService {
     // 게시글 삭제
     @Transactional
     public Long delete(final Long id) {
+<<<<<<< HEAD
         Post entity = postRepository.findById(id).orElseThrow(() -> new CustomException("게시글 삭제 완료"));
+=======
+        Post enetity = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCodes.POST_NOT_FOUND));
+>>>>>>> 62b7de8 (feat: 게시글 등록, 수정, 조회, 삭제)
         entity.delete();
         return id;
     }
