@@ -17,7 +17,8 @@ public class IssueService {
   private final PostDslRepository postDslRepository;
 
   public List<IssueSummary> getHotIssues() {
-    return null;
+    List<IssueSummary> hotIssues = postDslRepository.findHotIssues();
+    return hotIssues;
   }
 
   public List<IssueSummary> getAllIssues() {
