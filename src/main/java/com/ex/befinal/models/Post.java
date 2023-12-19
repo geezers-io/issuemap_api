@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -53,6 +54,32 @@ public class Post implements Serializable {
   private Date removedAt;
 
   @Column(name = "disable_at")
-  private Date disabledAt;
+  private Date disabledAt; // 신고누적이 되면 비활성화 되는 필드
+
+  @Builder
+  public Post(Long id, User user, String title, String description, short reportCount, BigDecimal latitude,
+              BigDecimal longitude, Date createdAt, Date removedAt, Date disabledAt) {
+    this.id = id;
+    this.user = user;
+    this.title = title;
+    this.description = description;
+    this.reportCount = reportCount;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.createdAt = createdAt;
+    this.removedAt = removedAt;
+    this.disabledAt = disabledAt;
+  }
+
+  public void update(String title, String description, User user, Date createdAt){
+    this.title = title;
+    this.description = description;
+    this.user = user;
+    this.createdAt = createdAt;
+  }
+
+  public void delete(){
+    this.removedAt = removedAt;
+  }
 
 }
