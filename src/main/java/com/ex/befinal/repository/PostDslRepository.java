@@ -1,47 +1,31 @@
 package com.ex.befinal.repository;
 
-import static com.ex.befinal.models.QAttachment.attachment;
+import static com.ex.befinal.models.QLikeAndDislike.likeAndDislike;
 import static com.ex.befinal.models.QPost.post;
-import static com.ex.befinal.models.QPostTag.postTag;
-import static com.ex.befinal.models.QTag.tag;
 import static com.querydsl.core.group.GroupBy.groupBy;
-import static java.util.Collections.list;
-import com.ex.befinal.admin.dto.AdminAllIssuesResponse;
+
 import com.ex.befinal.admin.dto.AdminIssuesResponse;
 import com.ex.befinal.constant.LikeStatus;
 import com.ex.befinal.issue.domain.IssueSummary;
 import com.ex.befinal.issue.domain.QIssueSummary;
-import com.ex.befinal.models.LikeAndDislike;
-import com.ex.befinal.models.Post;
 import com.ex.befinal.models.QAttachment;
 import com.ex.befinal.models.QLikeAndDislike;
 import com.ex.befinal.models.QPost;
 import com.ex.befinal.models.QPostTag;
 import com.ex.befinal.models.QTag;
-import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.LocalDateTime;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -60,6 +44,7 @@ public class PostDslRepository {
                 post.createdAt))
         .from(post)
         .where(post.user.id.eq(userId))
+        .orderBy(post.createdAt.desc())
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .fetch();
@@ -86,7 +71,15 @@ public class PostDslRepository {
             .leftJoin(tag).on(tag.id.eq(postTag.tag.id))
             .leftJoin(attachment).on(attachment.id.eq(
                 getPostAttachExpression(attachment, post.id)))
-            .where(post.removedAt.isNull().and(post.disabledAt.isNull())));
+            .where(post.removedAt.isNull().and(post.disabledAt.isNull()))
+            .groupBy(
+                post.id,
+                post.title,
+                subAttachment.uploadPath,
+                post.description,
+                tag.name,
+                post.createdAt)
+            .orderBy(post.createdAt.desc()));
     return issueSummaries;
   }
 
@@ -94,17 +87,15 @@ public class PostDslRepository {
       QAttachment attachment,
       NumberPath<Long> postId
   ) {
-    return JPAExpressions.select(attachment.id.min())
+    return JPAExpressions
+        .select(attachment.id.min())
         .from(attachment)
-        .where(
-            attachment.post.id.eq(postId)
-        );
+        .where(attachment.post.id.eq(postId));
   }
 
-  private JPQLQuery<Long> getPostIdExpression(
+  public JPQLQuery<Long> getPostIdExpression(
       QPost post,
       QLikeAndDislike likeAndDislike
-
   ) {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime threeMonthsAgo = now.minusMonths(3);
@@ -115,7 +106,7 @@ public class PostDslRepository {
 
     return JPAExpressions
         .select(
-            post.id
+            likeAndDislike.post.id
         )
         .from(post)
         .leftJoin(likeAndDislike).on(
@@ -129,21 +120,37 @@ public class PostDslRepository {
             post.id
         )
         .orderBy(
-          likeCount.desc()
+            likeCount.desc()
         )
         .limit(20
         );
   }
 
+  public List<Tuple> getPostIdAndCount() {
 
-  public List<IssueSummary> findHotIssues() {
-    
+    List<Tuple> result = queryFactory
+        .select(
+            likeAndDislike.post.id.count(),
+            likeAndDislike.post.id
+        )
+        .from(likeAndDislike)
+        .where(likeAndDislike.status.eq(LikeStatus.LIKE))
+        .groupBy(likeAndDislike.post.id)
+        .orderBy(likeAndDislike.post.id.count().desc()).limit(20).fetch();
+    return result;
+  }
+
+
+  public List<IssueSummary> findHotIssues(
+
+  ) {
     QPost post = QPost.post;
     QTag tag = QTag.tag;
     QPostTag postTag = QPostTag.postTag;
     QAttachment attachment = QAttachment.attachment;
     QAttachment subAttachment = QAttachment.attachment;
     QLikeAndDislike likeAndDislike = QLikeAndDislike.likeAndDislike;
+
     List<IssueSummary> issueSummaries = groupBy(post.id).list(
             new QIssueSummary(
                 post.id,
@@ -164,5 +171,9 @@ public class PostDslRepository {
             .where(post.removedAt.isNull().and(post.disabledAt.isNull())));
     return issueSummaries;
 
+  }
+
+  public List<IssueSummary> findGeoIssues(Double latitude, Double longitude) {
+    return null;
   }
 }

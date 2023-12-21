@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import lombok.Builder;
 
 /**
  * 게시글 데이터를 의미합니다.
@@ -16,6 +17,7 @@ import java.util.Set;
  * @param tags
  * @param createdAt
  */
+
 public record IssueSummary(
     Long id,
     String title,
