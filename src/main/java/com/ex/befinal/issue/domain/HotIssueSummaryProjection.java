@@ -1,6 +1,7 @@
 package com.ex.befinal.issue.domain;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public interface HotIssueSummaryProjection {
@@ -12,7 +13,7 @@ public interface HotIssueSummaryProjection {
 
   String getDescription();
 
-  Set<String> getTags();
+  String getTags();
 
   Date getCreatedAt();
 

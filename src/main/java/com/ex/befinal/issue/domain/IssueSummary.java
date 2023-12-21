@@ -42,6 +42,7 @@ public record IssueSummary(
     this.createdAt = createdAt;
   }
 
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
