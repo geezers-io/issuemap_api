@@ -1,5 +1,6 @@
 package com.ex.befinal.issue.service;
 
+import com.ex.befinal.issue.domain.GeoIssueSummaryProjection;
 import com.ex.befinal.issue.domain.HotIssueSummaryProjection;
 import com.ex.befinal.issue.domain.IssueSummary;
 import com.ex.befinal.repository.JpaPostRepository;
@@ -24,7 +25,7 @@ public class IssueService {
   private final JpaPostRepository postRepository;
 
   public List<IssueSummary> getHotIssues() {
-    List<HotIssueSummaryProjection> projections = postRepository.findPosts();
+    List<HotIssueSummaryProjection> projections = postRepository.findHotPosts();
     List<IssueSummary> issueSummaries = new ArrayList<>();
     for (HotIssueSummaryProjection projection : projections) {
       Set<String> tagSet = new HashSet<>();
@@ -55,7 +56,26 @@ public class IssueService {
   }
 
   public List<IssueSummary> getGeoIssues(Double latitude, Double longitude) {
-    List<IssueSummary> geoIssues = postDslRepository.findGeoIssues(latitude, longitude);
-    return geoIssues;
+    List<GeoIssueSummaryProjection> geoIssues =
+        postRepository.findGeoPosts(latitude, longitude);
+    List<IssueSummary> issueSummaries = new ArrayList<>();
+    for (GeoIssueSummaryProjection projection : geoIssues) {
+      Set<String> tagSet = new HashSet<>();
+      if (projection.getTags() != null && !projection.getTags().isEmpty()) {
+        tagSet = Stream.of(projection.getTags().split(","))
+            .map(String::trim)
+            .collect(Collectors.toSet());
+      }
+      IssueSummary issueSummary = new IssueSummary(
+          projection.getId(),
+          projection.getTitle(),
+          projection.getThumbnailUrl(),
+          projection.getDescription(),
+          tagSet,
+          projection.getCreatedAt() // 이 부분은 Date 타입이어야 합니다. 필요하다면 타입 변환을 수행하세요.
+      );
+      issueSummaries.add(issueSummary);
+    }
+    return issueSummaries;
   }
 }

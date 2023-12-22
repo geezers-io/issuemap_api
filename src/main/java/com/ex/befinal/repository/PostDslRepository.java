@@ -79,7 +79,7 @@ public class PostDslRepository {
                 post.description,
                 tag.name,
                 post.createdAt)
-            .orderBy(post.createdAt.desc()));
+            .orderBy(post.createdAt.desc()).limit(10));
     return issueSummaries;
   }
 
@@ -173,7 +173,5 @@ public class PostDslRepository {
 
   }
 
-  public List<IssueSummary> findGeoIssues(Double latitude, Double longitude) {
-    return null;
-  }
+
 }
