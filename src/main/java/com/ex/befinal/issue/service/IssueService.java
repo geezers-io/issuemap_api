@@ -40,7 +40,7 @@ public class IssueService {
           projection.getThumbnailUrl(),
           projection.getDescription(),
           tagSet,
-          projection.getCreatedAt() // 이 부분은 Date 타입이어야 합니다. 필요하다면 타입 변환을 수행하세요.
+          projection.getCreatedAt()
       );
       issueSummaries.add(issueSummary);
     }
@@ -72,7 +72,7 @@ public class IssueService {
           projection.getThumbnailUrl(),
           projection.getDescription(),
           tagSet,
-          projection.getCreatedAt() // 이 부분은 Date 타입이어야 합니다. 필요하다면 타입 변환을 수행하세요.
+          projection.getCreatedAt() 
       );
       issueSummaries.add(issueSummary);
     }
