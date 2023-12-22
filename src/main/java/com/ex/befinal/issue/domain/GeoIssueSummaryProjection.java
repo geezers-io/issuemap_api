@@ -2,7 +2,7 @@ package com.ex.befinal.issue.domain;
 
 import java.util.Date;
 
-public interface GeoIssueSummaryProjection {
+public interface GeoIssueSummaryProjection extends IssueSummaryProjection {
   Long getId();
 
   String getTitle();
