@@ -2,11 +2,11 @@ package com.ex.befinal.admin.controller;
 
 import com.ex.befinal.admin.dto.AdminAllIssuesResponse;
 import com.ex.befinal.admin.dto.AdminIssuesResponse;
+import com.ex.befinal.admin.dto.RecentRegisteredUser;
 import com.ex.befinal.admin.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,5 +65,19 @@ public class AdminController {
 
   }
 
-  //사용자 비활성화
+  @Operation(summary = "최근 회원가입 내역")
+  @GetMapping("/recent")
+  public ResponseEntity<Page<RecentRegisteredUser>> getRecentRegisteredUser(
+      @Parameter(description = "조회할 페이지 넘버(0부터 시작)", required = true)
+      @RequestParam("page") int page,
+      @Parameter(description = "가져올 데이터 갯수 단위", required = true)
+      @RequestParam("size") int size
+  ) {
+    PageRequest pageable = PageRequest.of(page, size);
+    Page<RecentRegisteredUser> recentRegisteredUser =
+        adminService.getRecentRegisteredUser(pageable);
+    return ResponseEntity.status(HttpStatus.OK).body(recentRegisteredUser);
+  }
+
+
 }

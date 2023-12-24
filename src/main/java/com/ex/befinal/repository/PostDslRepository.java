@@ -5,6 +5,8 @@ import static com.ex.befinal.models.QPost.post;
 import static com.querydsl.core.group.GroupBy.groupBy;
 
 import com.ex.befinal.admin.dto.AdminIssuesResponse;
+import com.ex.befinal.admin.dto.QRecentRegisteredUser;
+import com.ex.befinal.admin.dto.RecentRegisteredUser;
 import com.ex.befinal.constant.LikeStatus;
 import com.ex.befinal.issue.domain.IssueSummary;
 import com.ex.befinal.issue.domain.QIssueSummary;
@@ -13,6 +15,7 @@ import com.ex.befinal.models.QLikeAndDislike;
 import com.ex.befinal.models.QPost;
 import com.ex.befinal.models.QPostTag;
 import com.ex.befinal.models.QTag;
+import com.ex.befinal.models.QUser;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
@@ -26,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.LocalDateTime;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -230,4 +234,24 @@ public class PostDslRepository {
   }
 
 
+  public List<RecentRegisteredUser> getRecentUser(PageRequest pageable) {
+    QUser user = QUser.user;
+    List<RecentRegisteredUser> recentRegisteredUsers =
+        queryFactory.select(
+            new QRecentRegisteredUser(
+             user.id,
+             user.createAt,
+             user.nickName,
+             user.reportCount,
+             user.disableAt,
+             user.enable
+            )
+        )
+            .from(user)
+            .orderBy(user.createAt.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    return recentRegisteredUsers;
+  }
 }
