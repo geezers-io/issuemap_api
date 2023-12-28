@@ -1,15 +1,12 @@
 package com.ex.befinal.models;
 
 import com.ex.befinal.constant.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "users")
 @AllArgsConstructor
@@ -65,4 +63,15 @@ public class User implements Serializable {
   public boolean getEnable() {
     return this.enable;
   }
+
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL, // User가 삭제 될 때 연관된 엔티티인 LikeAndDislike도 삭제
+          orphanRemoval = true,
+          fetch = FetchType.LAZY)
+
+  private List<LikeAndDislike> likeAndDislikes;
 }
+
+
+
