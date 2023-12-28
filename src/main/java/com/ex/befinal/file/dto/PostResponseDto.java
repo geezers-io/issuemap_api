@@ -3,12 +3,11 @@ package com.ex.befinal.file.dto;
 import com.ex.befinal.models.Post;
 import com.ex.befinal.models.User;
 import lombok.Getter;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
-public class PostResponseDTO {
+public class PostResponseDto {
     private Long id; // pk
     private User user; // 사용자
     private String title; // 제목
@@ -20,7 +19,7 @@ public class PostResponseDTO {
     private Date removedAt; // 삭제 날짜
     private Date disabledAt; // 삭제 된 날짜
 
-    public PostResponseDTO(Post entity) {
+    public PostResponseDto(Post entity) {
         this.id = id;
         this.user = user;
         this.title = title;

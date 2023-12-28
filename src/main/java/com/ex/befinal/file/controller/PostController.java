@@ -1,7 +1,7 @@
 package com.ex.befinal.file.controller;
 
-import com.ex.befinal.file.dto.PostRequestDTO;
-import com.ex.befinal.file.dto.PostResponseDTO;
+import com.ex.befinal.file.dto.PostRequestDto;
+import com.ex.befinal.file.dto.PostResponseDto;
 import com.ex.befinal.file.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +17,19 @@ public class PostController {
 
     // 게시글 생성
     @PostMapping("/post")
-    public Long save(@RequestBody final PostRequestDTO params) {
+    public Long save(@RequestBody final PostRequestDto params) {
         return postService.save(params);
     }
 
     // 게시글 조회
     @GetMapping("/post")
-    public List<PostResponseDTO> findAll(){
+    public List<PostResponseDto> findAll(){
         return postService.findAll();
     }
 
     // 게시글 수정
     @PatchMapping("/post/{id}")
-    public Long save(@PathVariable final Long id, @RequestBody final PostRequestDTO params) {
+    public Long save(@PathVariable final Long id, @RequestBody final PostRequestDto params) {
         return postService.update(id, params);
     }
 

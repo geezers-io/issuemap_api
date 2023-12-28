@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostRequestDTO {
+public class PostRequestDto {
 
     private String title; // 제목
     private String description; // 내용
