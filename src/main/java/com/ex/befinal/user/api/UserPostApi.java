@@ -32,4 +32,5 @@ public class UserPostApi {
         Page<AdminIssuesResponse> responses = adminService.getAdminUserIssues(pageable, nickname);
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
+
 }
