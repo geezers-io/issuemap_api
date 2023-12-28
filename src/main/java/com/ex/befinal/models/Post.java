@@ -9,9 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +31,12 @@ public class Post implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id",  referencedColumnName = "id")
   private User user;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+  private List<PostTag> postTags;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+  private List<Attachment> attachments;
 
   @Column(name = "title", nullable = false)
   private String title;

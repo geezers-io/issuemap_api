@@ -2,6 +2,7 @@ package com.ex.befinal.admin.service;
 
 import com.ex.befinal.admin.dto.AdminAllIssuesResponse;
 import com.ex.befinal.admin.dto.AdminIssuesResponse;
+import com.ex.befinal.admin.dto.RecentRegisteredUser;
 import com.ex.befinal.admin.dto.SimpleUser;
 import com.ex.befinal.global.exception.GlobalException;
 import com.ex.befinal.models.User;
@@ -28,6 +29,7 @@ public class AdminService {
   private final PostDslRepository postDslRepository;
   private final JpaCommentRepository commentRepository;
   private final JpaPostRepository postRepository;
+
   public Page<AdminIssuesResponse> getAdminUserIssues(
       PageRequest pageable, String nickname) {
     Long userId = userDslRepository.findByUserNickname(nickname)
@@ -71,5 +73,10 @@ public class AdminService {
     SimpleUser simpleUser = userDslRepository.findUserById(id)
         .orElseThrow(GlobalException.NOT_FOUND::create);
     return new AdminAllIssuesResponse(simpleUser, postCnt, commentCnt);
+  }
+
+  public Page<RecentRegisteredUser> getRecentRegisteredUser(PageRequest pageable) {
+    List<RecentRegisteredUser> recentUser = postDslRepository.getRecentUser(pageable);
+    return new PageImpl<>(recentUser);
   }
 }
