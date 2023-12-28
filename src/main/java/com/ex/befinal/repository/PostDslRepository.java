@@ -16,6 +16,7 @@ import com.ex.befinal.models.QTag;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
@@ -80,6 +81,61 @@ public class PostDslRepository {
                 tag.name,
                 post.createdAt)
             .orderBy(post.createdAt.desc()).limit(10));
+    return issueSummaries;
+  }
+
+  public List<IssueSummary> findAllIssues(
+      String title,
+      Date startDate,
+      Date endDate,
+      Pageable pageable
+  ) {
+    QPost post = QPost.post;
+    QTag tag = QTag.tag;
+    QPostTag postTag = QPostTag.postTag;
+    QAttachment attachment = QAttachment.attachment;
+    QAttachment subAttachment = QAttachment.attachment;
+
+    BooleanExpression condition = post.removedAt.isNull().and(post.disabledAt.isNull());
+
+    if (title != null && !title.isEmpty()) {
+      condition = condition.and(post.title.containsIgnoreCase(title));
+    }
+    if (startDate != null) {
+      condition = condition.and(post.createdAt.goe(startDate));
+    }
+    if (endDate != null) {
+      condition = condition.and(post.createdAt.loe(endDate));
+    }
+
+    List<IssueSummary> issueSummaries = groupBy(post.id).list(
+            new QIssueSummary(
+                post.id,
+                post.title,
+                subAttachment.uploadPath.coalesce("No Image"),
+                post.description,
+                GroupBy.set(tag.name),
+                post.createdAt
+            ))
+        .transform(queryFactory
+            .from(post)
+            .leftJoin(postTag).on(postTag.post.id.eq(post.id))
+            .leftJoin(tag).on(tag.id.eq(postTag.tag.id))
+            .leftJoin(attachment).on(attachment.id.eq(getPostAttachExpression(attachment, post.id)))
+            .where(condition.and(
+                post.removedAt.isNull().and(post.disabledAt.isNull())
+            ))
+            .groupBy(
+                post.id,
+                post.title,
+                subAttachment.uploadPath,
+                post.description,
+                tag.name,
+                post.createdAt)
+            .orderBy(post.createdAt.desc())
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset()));
+
     return issueSummaries;
   }
 
