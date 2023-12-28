@@ -1,11 +1,27 @@
 package com.ex.befinal.file.service;
 
+<<<<<<< Updated upstream
 import com.ex.befinal.file.dto.PostRequestDto;
 import com.ex.befinal.file.dto.PostResponseDto;
+=======
+import ch.qos.logback.core.spi.ErrorCodes;
+import com.ex.befinal.file.dto.PostRequestDTO;
+import com.ex.befinal.file.dto.PostResponseDTO;
+<<<<<<< HEAD
+>>>>>>> Stashed changes
 import com.ex.befinal.file.exception.CustomException;
 import com.ex.befinal.file.repository.PostRepository;
 import com.ex.befinal.models.Post;
 import lombok.RequiredArgsConstructor;
+<<<<<<< Updated upstream
+=======
+import org.apache.logging.log4j.message.Message;
+=======
+import com.ex.befinal.file.repository.PostRepository;
+import com.ex.befinal.models.Post;
+import lombok.RequiredArgsConstructor;
+>>>>>>> 62b7de874240edd7fd34ebafca564f8c8783618f
+>>>>>>> Stashed changes
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +49,16 @@ public class PostService {
     }
     //게시글 수정
     @Transactional
+<<<<<<< Updated upstream
     public Long update(final Long id, final PostRequestDto params){
+=======
+    public Long update(final Long id, final PostRequestDTO params){
+<<<<<<< HEAD
+>>>>>>> Stashed changes
         Post entity = postRepository.findById(id).orElseThrow(() -> new CustomException("게시글 수정 완료"));
+=======
+        Post entity = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCodes.POST_NOT_FOUND));
+>>>>>>> 62b7de874240edd7fd34ebafca564f8c8783618f
         entity.update(params.getTitle(), params.getDescription(), params.getUser(), params.getUser().getCreateAt());
         return id;
     }
@@ -42,7 +66,11 @@ public class PostService {
     // 게시글 삭제
     @Transactional
     public Long delete(final Long id) {
+<<<<<<< HEAD
         Post entity = postRepository.findById(id).orElseThrow(() -> new CustomException("게시글 삭제 완료"));
+=======
+        Post enetity = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCodes.POST_NOT_FOUND));
+>>>>>>> 62b7de874240edd7fd34ebafca564f8c8783618f
         entity.delete();
         return id;
     }
