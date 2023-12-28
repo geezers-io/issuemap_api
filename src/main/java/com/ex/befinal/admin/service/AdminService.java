@@ -28,6 +28,7 @@ public class AdminService {
   private final PostDslRepository postDslRepository;
   private final JpaCommentRepository commentRepository;
   private final JpaPostRepository postRepository;
+
   public Page<AdminIssuesResponse> getAdminUserIssues(
       PageRequest pageable, String nickname) {
     Long userId = userDslRepository.findByUserNickname(nickname)
