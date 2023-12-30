@@ -12,13 +12,11 @@ public class PostRequestDto {
 
     private String title; // 제목
     private String description; // 내용
-    private User user; // 사용자
 
     public Post toEntity() {
         return Post.builder()
                 .title(title)
                 .description(description)
-                .user(user)
                 .build();
     }
 }
