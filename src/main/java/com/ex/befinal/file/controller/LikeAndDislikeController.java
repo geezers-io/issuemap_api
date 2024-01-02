@@ -1,5 +1,7 @@
 package com.ex.befinal.file.controller;
 
+import com.ex.befinal.file.Dto.LikeAndDislikeDto;
+import com.ex.befinal.file.service.LikeAndDislikeService;
 import com.ex.befinal.models.LikeAndDislike;
 import groovy.util.logging.Slf4j;
 import jakarta.validation.Valid;
@@ -18,15 +20,17 @@ public class LikeAndDislikeController {
 
     private final LikeAndDislikeService likeAndDislikeService;
 
+    // 좋아요
     @PostMapping
-    public ResponseEntity<LikeAndDislike> likeAndDislike(@RequestBody @Valid LikeAndDislikeDto likeAndDislikeDto, String jtwToken) throws IOException {
-        // likeAndDislikeService.likeAndDislike(likeAndDislikeDto);
+    public ResponseEntity<LikeAndDislikeDto> likeAndDislike(@RequestBody @Valid LikeAndDislikeDto likeAndDislikeDto) throws IOException {
+        likeAndDislikeService.likeAndDislike(likeAndDislikeDto);
         return new ResponseEntity<>(likeAndDislikeDto, HttpStatus.CREATED);
     }
 
+    // 싫어요
     @DeleteMapping
     public ResponseEntity<LikeAndDislikeDto> unLikeAndDislike(@RequestBody @Valid LikeAndDislikeDto likeAndDislikeDto) throws IOException {
-        // likeAndDislikeService.likeAndDislike(likeAndDislikeDto);
+        likeAndDislikeService.likeAndDislike(likeAndDislikeDto);
         return new ResponseEntity<>(likeAndDislikeDto, HttpStatus.OK);
     }
 
